@@ -1,0 +1,369 @@
+🎙️ SpeechPro - Speech Pathology Equipment E-Commerce Store
+A modern, full-stack web application for selling professional speech pathology tools and equipment. Features a FastAPI REST API backend integrated with AngularJS frontend, including a fully functional shopping cart system.
+
+
+📋 Table of Contents
+
+Project Overview
+Features
+Tech Stack
+Project Structure
+Prerequisites
+Installation & Setup
+Running the Application
+Testing the Application
+How It Works
+Troubleshooting
+Project Statistics
+
+
+
+🎯 Project Overview
+This project demonstrates a complete full-stack web application with:
+
+FastAPI Backend: REST API that serves a welcome message
+AngularJS Frontend: Single-page application that consumes the REST API
+E-Commerce Features: Fully functional shopping cart with add/remove/checkout
+Real-time Integration: Frontend calls backend API and displays response
+
+✨ Features
+Backend (FastAPI)
+
+🔌 REST API Endpoints
+
+/api/welcome - Returns welcome message (called by frontend)
+/api/products - Returns product list
+/health - Health check endpoint
+/docs - Interactive API documentation (Swagger UI)
+
+
+🔒 CORS Enabled - Allows cross-origin requests from frontend
+✅ Data Validation - Pydantic models for request/response validation
+📚 Auto-generated Documentation - Built-in Swagger and ReDoc
+
+Frontend (HTML + CSS + AngularJS)
+
+🎨 Modern Responsive Design with gradient backgrounds
+📱 Mobile-Friendly interface
+🔄 Real-time API Integration - Calls FastAPI on page load
+🛒 Shopping Cart System:
+
+Add products to cart
+Adjust quantities (+/-)
+Remove items
+Real-time total calculation
+Sliding cart panel with overlay
+Success notifications
+Checkout functionality
+
+
+🎯 Product Catalog - 6 speech pathology equipment items
+⚡ Smooth Animations and hover effects
+📊 Dynamic Content - All managed by AngularJS
+
+
+🛠️ Tech Stack
+Backend:
+
+Python 3.8+
+FastAPI 0.104.1
+Uvicorn (ASGI server)
+Pydantic (Data validation)
+
+Frontend:
+
+HTML5
+CSS3 (Flexbox, Grid, Animations)
+JavaScript ES6+
+AngularJS 1.8.3
+
+API Communication:
+
+RESTful architecture
+JSON data format
+HTTP GET requests
+CORS headers
+
+
+📁 Project Structure
+speechpro-project/
+│
+├── frontend/
+│   └── index.html              # Complete frontend application
+│                               # (HTML + CSS + AngularJS in one file)
+│
+├── backend/
+│   ├── main.py                 # FastAPI REST API application
+│   └── requirements.txt        # Python dependencies
+│
+└── README.md                   # This file
+
+✅ Prerequisites
+Before you begin, ensure you have:
+
+✅ Python 3.8 or higher
+
+bash  python3 --version
+
+✅ pip (Python package manager)
+
+bash  pip3 --version
+
+✅ Modern Web Browser (Chrome, Firefox, Safari, Edge)
+✅ VS Code (Recommended)
+
+Install "Python" extension by Microsoft
+Install "Live Server" extension (optional, for frontend)
+
+
+
+
+🚀 Installation & Setup
+Step 1: Create Project Structure
+bash# Navigate to your desired location
+cd ~/Desktop
+
+# Create project folder
+mkdir speechpro-project
+cd speechpro-project
+
+# Create subfolders
+mkdir frontend backend
+Step 2: Create Frontend File
+Create frontend/index.html and copy the complete HTML/CSS/AngularJS code from the artifact.
+Step 3: Create Backend Files
+Create backend/main.py - Copy the FastAPI code from the artifact.
+Create backend/requirements.txt with:
+textfastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+python-multipart==0.0.6
+Step 4: Setup Python Virtual Environment
+bash# Navigate to backend folder
+cd backend
+
+# Create virtual environment
+python3 -m venv venv
+
+# Activate virtual environment
+# On Mac/Linux:
+source venv/bin/activate
+
+# On Windows:
+venv\Scripts\activate
+
+# You should see (venv) before your prompt:
+# (venv) username@computer backend %
+Step 5: Install Python Dependencies
+bash# Make sure virtual environment is activated (you see "venv" in prompt)
+pip install -r requirements.txt
+
+# Verify installation
+pip list
+# Should show: fastapi, uvicorn, pydantic
+
+
+
+🎬 Running the Application
+You need TWO terminal windows running simultaneously:
+Terminal 1: Start Backend Server (FastAPI)
+bash# Navigate to backend folder
+cd ~/Desktop/speechpro-project/backend
+
+# Activate virtual environment
+source venv/bin/activate  # Mac/Linux
+# OR
+venv\Scripts\activate     # Windows
+
+# Run FastAPI server
+python3 main.py
+
+# Expected output:
+# INFO:     Started server process [12345]
+# INFO:     Waiting for application startup.
+# INFO:     Application startup complete.
+# INFO:     Uvicorn running on http://0.0.0.0:8000
+✅ Backend is now running on http://localhost:8000
+Terminal 2: Start Frontend Server
+Option A: Python HTTP Server (Recommended)
+bash# Open NEW terminal tab/window
+# Navigate to frontend folder
+cd ~/Desktop/speechpro-project/frontend
+
+# Start server
+python3 -m http.server 8080
+
+# Expected output:
+# Serving HTTP on :: port 8080 (http://[::]:8080/) ...
+Option B: VS Code Live Server
+
+Install "Live Server" extension in VS Code
+Right-click index.html in VS Code
+Select "Open with Live Server"
+Opens automatically at http://127.0.0.1:5500
+
+
+🧪 Testing the Application
+1. Test Backend API Directly
+In browser, visit these URLs:
+
+Root: http://localhost:8000
+
+Should show API info and available endpoints
+
+
+Welcome Endpoint: http://localhost:8000/api/welcome
+
+Should return JSON:
+
+
+
+json  {
+    "message": "🎉 Welcome to SpeechPro!...",
+    "timestamp": "2025-10-16T...",
+    "status": "success"
+  }
+
+API Documentation: http://localhost:8000/docs
+
+Interactive Swagger UI to test all endpoints
+
+
+Products Endpoint: http://localhost:8000/api/products
+
+Should return array of 6 products
+
+
+
+Or use curl in terminal:
+bash# Test welcome endpoint
+curl http://localhost:8000/api/welcome
+
+# Test products endpoint
+curl http://localhost:8000/api/products
+
+# Test health check
+curl http://localhost:8000/health
+2. Test Frontend-Backend Integration
+Open http://localhost:8080 in browser
+✅ Check Hero Section:
+
+Should see welcome message from API in a frosted glass card
+Should see "✓ Connected to API Server" status
+If backend is off, should see error message
+
+✅ Open Browser Console (Press F12 or Cmd + Option + I):
+
+Should see: ✅ API Response: {message: "...", ...}
+Should see successful GET request: GET http://localhost:8000/api/welcome 200
+
+3. Test Shopping Cart Functionality
+Add Products:
+
+Click "Add to Cart" on any product
+Green success notification appears
+Cart icon badge shows item count
+
+Manage Cart:
+
+Click cart icon (🛒) in header
+Cart panel slides in from right
+Use +/- buttons to adjust quantities
+Click "Remove" to delete items
+See real-time total update
+
+Checkout:
+
+Click "Proceed to Checkout"
+See order summary alert
+Cart clears after checkout
+
+4. Check Console Logs
+Backend Terminal:
+INFO:     127.0.0.1:52847 - "GET /api/welcome HTTP/1.1" 200 OK
+Frontend Browser Console:
+javascript✅ API Response: {
+  message: "🎉 Welcome to SpeechPro!...",
+  timestamp: "2025-10-16T16:39:11.123456",
+  status: "success"
+}
+
+
+🔍 How It Works
+API Integration Flow
+1. User opens http://localhost:8080
+   ↓
+2. Browser loads index.html
+   ↓
+3. AngularJS initializes (ng-app="speechProApp")
+   ↓
+4. MainController executes
+   ↓
+5. fetchWelcomeMessage() function runs automatically
+   ↓
+6. $http.get('http://localhost:8000/api/welcome') called
+   ↓
+7. FastAPI receives request, processes it
+   ↓
+8. FastAPI returns JSON response
+   ↓
+9. AngularJS receives response
+   ↓
+10. Updates $scope.apiWelcomeMessage
+    ↓
+11. HTML automatically updates (ng-if displays message)
+    ↓
+12. User sees welcome message on page!
+Code Explanation
+Frontend (AngularJS in index.html):
+javascript// FastAPI endpoint URL
+var apiUrl = 'http://localhost:8000/api/welcome';
+
+// Function to fetch welcome message
+function fetchWelcomeMessage() {
+    $http.get(apiUrl)
+        .then(function(response) {
+            // Success: Display message
+            $scope.apiWelcomeMessage = response.data.message;
+        })
+        .catch(function(error) {
+            // Error: Show error message
+            $scope.apiError = 'Backend API not connected...';
+        });
+}
+
+// Call API when page loads
+fetchWelcomeMessage();
+Backend (FastAPI in main.py):
+python@app.get("/api/welcome", response_model=WelcomeResponse)
+async def get_welcome() -> Dict:
+    """
+    Welcome endpoint called from AngularJS frontend
+    """
+    return {
+        "message": "🎉 Welcome to SpeechPro!...",
+        "timestamp": datetime.now().isoformat(),
+        "status": "success"
+    }
+
+🐛 Troubleshooting
+
+✅ Is backend running? Check terminal 1
+✅ Is it on port 8000? Visit http://localhost:8000
+✅ Is CORS enabled? (It should be by default in main.py)
+✅ Is frontend using correct URL? Check apiUrl in JavaScript
+
+
+📊 Project Statistics
+
+Total Files: 3 (index.html, main.py, requirements.txt)
+Lines of Code: ~1,200+
+API Endpoints: 4
+Products: 6
+Frontend Framework: AngularJS
+Backend Framework: FastAPI
+
+
+
+Project Type: Full-Stack Web Application with REST API Integration
+Last Updated: October 16, 2025

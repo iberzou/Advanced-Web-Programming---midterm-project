@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html ng-app="speechProApp" ng-controller="MainController">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpeechPro - Professional Speech Pathology Equipment</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .cart-icon:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 150px 2rem 100px;
+            text-align: center;
+            margin-top: 70px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 1s ease 0.4s backwards;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* API Welcome Message */
+        .api-welcome {
+            background: rgba(255,255,255,0.2);
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 700px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            animation: fadeInUp 1s ease 0.6s backwards;
+        }
+
+        .api-message {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .api-status {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 600;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 2rem;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #667eea;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 80px 2rem;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .product-price {
+            color: #667eea;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .buy-button {
+            background: #667eea;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .buy-button:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .buy-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Shopping Cart Modal */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -500px;
+            width: 450px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+            transition: right 0.3s ease;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-modal.active {
+            right: 0;
+        }
+
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+            display: none;
+        }
+
+        .cart-overlay.active {
+            display: block;
+        }
+
+        .cart-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .close-cart:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            animation: slideIn 0.3s ease;
+        }
+
+        .cart-item-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .qty-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .qty-btn:hover {
+            background: #764ba2;
+        }
+
+        .remove-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            transition: background 0.3s;
+        }
+
+        .remove-btn:hover {
+            background: #ff3838;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #999;
+        }
+
+        .cart-empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .cart-footer {
+            border-top: 2px solid #eee;
+            padding: 1.5rem;
+            background: #f8f9fa;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .checkout-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* About Section */
+        .about {
+            padding: 80px 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-content p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .copyright {
+            border-top: 1px solid #4a5568;
+            padding-top: 2rem;
+            color: #cbd5e0;
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            z-index: 3000;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cart-modal {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                🎙️ SpeechPro
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About</a></li>
+                <li>
+                    <div class="cart-icon" ng-click="toggleCart()">
+                        🛒
+                        <span class="cart-count" ng-if="getTotalItems() > 0">{{ getTotalItems() }}</span>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" ng-class="{active: cartOpen}" ng-click="toggleCart()"></div>
+
+    <!-- Shopping Cart Modal -->
+    <div class="cart-modal" ng-class="{active: cartOpen}">
+        <div class="cart-header">
+            <h2>🛒 Your Cart</h2>
+            <button class="close-cart" ng-click="toggleCart()">✕</button>
+        </div>
+        
+        <div class="cart-items">
+            <div ng-if="cart.length === 0" class="cart-empty">
+                <div class="cart-empty-icon">🛒</div>
+                <p>Your cart is empty</p>
+                <p style="font-size: 0.9rem;">Add some amazing products!</p>
+            </div>
+            
+            <div class="cart-item" ng-repeat="item in cart">
+                <div class="cart-item-icon">{{ item.icon }}</div>
+                <div class="cart-item-details">
+                    <div class="cart-item-name">{{ item.name }}</div>
+                    <div class="cart-item-price">${{ item.price }}</div>
+                    <div class="cart-item-quantity">
+                        <button class="qty-btn" ng-click="decreaseQuantity(item)">−</button>
+                        <span>{{ item.quantity }}</span>
+                        <button class="qty-btn" ng-click="increaseQuantity(item)">+</button>
+                    </div>
+                    <button class="remove-btn" ng-click="removeFromCart(item)">Remove</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span>${{ getTotal() }}</span>
+            </div>
+            <button class="checkout-btn" ng-disabled="cart.length === 0" ng-click="checkout()">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" ng-if="showSuccess">
+        ✓ {{ successMessage }}
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1>Professional Speech Pathology Equipment</h1>
+        <p>Empowering Speech-Language Pathologists with Premium Tools</p>
+        <!-- API Welcome Message from FastAPI -->
+        <div class="api-welcome" ng-if="apiWelcomeMessage">
+            <p class="api-message">{{ apiWelcomeMessage }}</p>
+            <p class="api-status">✓ Connected to API Server</p>
+        </div>
+        <div class="api-welcome" ng-if="apiError" style="background: rgba(255,0,0,0.3);">
+            <p class="api-message">⚠️ {{ apiError }}</p>
+        </div>
+        <a href="#products" class="cta-button">Shop Now</a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose SpeechPro?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Premium Quality</h3>
+                    <p>All our equipment meets the highest professional standards and is used by leading speech pathologists worldwide.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Express shipping available. Get your essential tools delivered quickly to keep your practice running smoothly.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Expert Support</h3>
+                    <p>Our team of specialists is here to help you choose the right equipment for your specific needs.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Checkout</h3>
+                    <p>Shop with confidence. Your transactions are protected with enterprise-grade security.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Our Popular Equipment</h2>
+            <div class="products-grid">
+                <div class="product-card" ng-repeat="product in products">
+                    <div class="product-image">{{ product.icon }}</div>
+                    <div class="product-info">
+                        <h3>{{ product.name }}</h3>
+                        <p>{{ product.description }}</p>
+                        <div class="product-price">${{ product.price }}</div>
+                        <button class="buy-button" ng-click="addToCart(product)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="about-content">
+            <h2 class="section-title" style="color: white;">About SpeechPro</h2>
+            <p>For over 15 years, SpeechPro has been the trusted provider of professional speech pathology equipment to clinics, schools, and private practices worldwide.</p>
+            <p>We understand the critical role that quality tools play in effective therapy. That's why we carefully curate our inventory to include only the most reliable, effective, and innovative equipment available.</p>
+            <p>Our mission is to empower speech-language pathologists with the tools they need to transform lives through better communication.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">Returns Policy</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul>
+                    <li>📧 info@speechpro.com</li>
+                    <li>📞 1-800-SPEECH-PRO</li>
+                    <li>📍 123 Therapy Lane, Medical Plaza</li>
+                    <li>🕒 Mon-Fri: 9AM-6PM EST</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 SpeechPro. All rights reserved. | Professional Speech Pathology Equipment</p>
+        </div>
+    </footer>
+
+    <script>
+        // AngularJS Application
+        var app = angular.module('speechProApp', []);
+
+        app.controller('MainController', function($scope, $timeout, $http) {
+            // API Integration - Call FastAPI Welcome endpoint
+            $scope.apiWelcomeMessage = '';
+            $scope.apiError = '';
+            
+            // FastAPI endpoint URL
+            var apiUrl = 'http://localhost:8000/api/welcome';
+            
+            // Function to fetch welcome message from FastAPI
+            function fetchWelcomeMessage() {
+                $http.get(apiUrl)
+                    .then(function(response) {
+                        $scope.apiWelcomeMessage = response.data.message;
+                        console.log('✅ API Response:', response.data);
+                    })
+                    .catch(function(error) {
+                        $scope.apiError = 'Backend API not connected. Please start FastAPI server on port 8000.';
+                        console.error('❌ API Error:', error);
+                    });
+            }
+            
+            // Call API when page loads
+            fetchWelcomeMessage();
+            
+            // Products data
+            $scope.products = [
+                {
+                    id: 1,
+                    name: 'Professional Laryngoscope Kit',
+                    description: 'Complete diagnostic kit with multiple blade sizes and LED illumination.',
+                    price: 549.99,
+                    icon: '🎤'
+                },
+                {
+                    id: 2,
+                    name: 'Articulation Cards Set',
+                    description: 'Comprehensive 500-card set covering all phonemes and speech positions.',
+                    price: 89.99,
+                    icon: '🎯'
+                },
+                {
+                    id: 3,
+                    name: 'Voice Amplifier System',
+                    description: 'Portable wireless system perfect for classroom and therapy sessions.',
+                    price: 299.99,
+                    icon: '🔊'
+                },
+                {
+                    id: 4,
+                    name: 'Oral Motor Therapy Kit',
+                    description: '25-piece professional kit with various textures and resistance levels.',
+                    price: 129.99,
+                    icon: '📊'
+                },
+                {
+                    id: 5,
+                    name: 'Fluency Master Device',
+                    description: 'Advanced DAF/FAF device for stuttering therapy and fluency training.',
+                    price: 799.99,
+                    icon: '🎵'
+                },
+                {
+                    id: 6,
+                    name: 'Therapy Mirror Stand',
+                    description: 'Adjustable mirror with LED lighting for visual feedback during therapy.',
+                    price: 149.99,
+                    icon: '🪞'
+                }
+            ];
+
+            // Shopping cart
+            $scope.cart = [];
+            $scope.cartOpen = false;
+            $scope.showSuccess = false;
+            $scope.successMessage = '';
+
+            // Add to cart function
+            $scope.addToCart = function(product) {
+                var existingItem = $scope.cart.find(function(item) {
+                    return item.id === product.id;
+                });
+
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    $scope.cart.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        icon: product.icon,
+                        quantity: 1
+                    });
+                }
+
+                // Show success message
+                $scope.successMessage = product.name + ' added to cart!';
+                $scope.showSuccess = true;
+                $timeout(function() {
+                    $scope.showSuccess = false;
+                }, 2000);
+            };
+
+            // Remove from cart
+            $scope.removeFromCart = function(item) {
+                var index = $scope.cart.indexOf(item);
+                if (index > -1) {
+                    $scope.cart.splice(index, 1);
+                }
+            };
+
+            // Increase quantity
+            $scope.increaseQuantity = function(item) {
+                item.quantity++;
+            };
+
+            // Decrease quantity
+            $scope.decreaseQuantity = function(item) {
+                if (item.quantity > 1) {
+                    item.quantity--;
+                } else {
+                    $scope.removeFromCart(item);
+                }
+            };
+
+            // Get total items in cart
+            $scope.getTotalItems = function() {
+                return $scope.cart.reduce(function(total, item) {
+                    return total + item.quantity;
+                }, 0);
+            };
+
+            // Get total price
+            $scope.getTotal = function() {
+                var total = $scope.cart.reduce(function(sum, item) {
+                    return sum + (item.price * item.quantity);
+                }, 0);
+                return total.toFixed(2);
+            };
+
+            // Toggle cart
+            $scope.toggleCart = function() {
+                $scope.cartOpen = !$scope.cartOpen;
+            };
+
+            // Checkout function
+            $scope.checkout = function() {
+                if ($scope.cart.length === 0) return;
+
+                alert('Thank you for your order!\n\nTotal: $' + $scope.getTotal() + '\nItems: ' + $scope.getTotalItems() + '\n\nThis is a demo. In production, this would redirect to payment processing.');
+                
+                // Clear cart after checkout
+                $scope.cart = [];
+                $scope.cartOpen = false;
+            };
+        });
+    </script>
+</body>
+</html>
